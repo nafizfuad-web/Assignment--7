@@ -1,0 +1,25 @@
+import { AuthShell } from "@/components/auth/AuthParts";
+import SignInForm from "@/components/auth/SignInForm";
+import { getSafeCallbackURL } from "@/lib/auth-redirect";
+import { getEnabledSocialProviders } from "@/lib/social-providers";
+
+export default async function SignInPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ callbackURL?: string }>;
+}) {
+  const { callbackURL } = await searchParams;
+  const socialProviders = getEnabledSocialProviders();
+
+  return (
+    <AuthShell
+      subtitle="বিস্তারিত দাম, বাজার তুলনা ও প্রোফাইল দেখতে অ্যাকাউন্টে ঢুকুন।"
+      title="সাইন ইন"
+    >
+      <SignInForm
+        callbackURL={getSafeCallbackURL(callbackURL)}
+        socialProviders={socialProviders}
+      />
+    </AuthShell>
+  );
+}

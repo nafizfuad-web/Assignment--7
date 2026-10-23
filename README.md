@@ -34,3 +34,19 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## বাজারদর সেটআপ
+
+প্রথমে local environment config তৈরি করুন:
+
+```powershell
+Copy-Item .env.example .env.local
+```
+
+`.env.local`-এ `BETTER_AUTH_SECRET`-এর জন্য `npx auth secret` চালিয়ে তৈরি করা অন্তত ৩২ অক্ষরের random secret বসান। MongoDB চালু রাখুন; local URI `mongodb://127.0.0.1:27017/bazar-dor` ব্যবহার করা হয়। Google/GitHub sign-in চালু করতে সংশ্লিষ্ট provider-এর client ID ও secret পূরণ করুন।
+
+```bash
+npm run dev
+```
+
+MongoDB-তে auth collection Better Auth নিজে তৈরি করে; আলাদা schema migration নেই। Catalog-এর পণ্য ও বিভাগ BazaarDor API থেকে আসে। Category page public; product details এবং profile page sign-in ছাড়া খোলা যাবে না। Route protection `src/proxy.ts` এবং protected server page-এ করা হয়।
