@@ -34,7 +34,7 @@ export default async function PriceTicker() {
           >
             <span aria-hidden="true">{product.image}</span>
             <span>
-              {product.nameBn} {formatPrice(product.today)} টাকা
+              {product.nameBn} {formatPrice(product.today)} টাকা/কেজি
             </span>
             <b className={color[product.change.dir]}>
               {arrow[product.change.dir]}{" "}

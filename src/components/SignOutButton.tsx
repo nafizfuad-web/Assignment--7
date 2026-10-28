@@ -34,11 +34,12 @@ export function SignOutButton() {
   return (
     <div className="flex flex-col items-start gap-1">
       <button
-        className="btn btn-outline"
+        className="btn btn-outline profile-signout"
         disabled={isPending}
         onClick={signOut}
         type="button"
       >
+        <span aria-hidden="true">↩</span>
         {isPending ? "সাইন আউট হচ্ছে…" : "সাইন আউট"}
       </button>
       {error && (

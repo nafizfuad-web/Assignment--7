@@ -1,5 +1,6 @@
-import Link from "next/link";
+import Image from "next/image";
 import { redirect } from "next/navigation";
+import { ProfileUpdateForm } from "@/components/ProfileUpdateForm";
 import { SignOutButton } from "@/components/SignOutButton";
 import { getCurrentSession } from "@/lib/auth";
 
@@ -10,33 +11,43 @@ export default async function ProfilePage() {
   if (!session) redirect("/signin?callbackURL=%2Fprofile");
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-10">
-      <section className="card card-border bg-base-100">
-        <div className="card-body gap-5">
-          <div>
-            <h1 className="text-2xl font-bold">আমার প্রোফাইল</h1>
-            <p className="mt-1 text-base-content/60">
-              স্বাগতম, {session.user.name}
-            </p>
-          </div>
-          <dl className="grid gap-3 sm:grid-cols-2">
-            <div>
-              <dt className="text-sm text-base-content/60">নাম</dt>
-              <dd className="font-medium">{session.user.name}</dd>
+    <main className="profile-page">
+      <div className="profile-layout">
+        <header className="profile-heading">
+          <h1>আমার প্রোফাইল</h1>
+          <p>আপনার অ্যাকাউন্টের তথ্য এখানে দেখুন।</p>
+        </header>
+
+        <section aria-label="ব্যবহারকারীর তথ্য" className="profile-summary">
+          {session.user.image ? (
+            <Image
+              alt={`${session.user.name} এর ছবি`}
+              className="profile-avatar"
+              height={80}
+              src={session.user.image}
+              unoptimized
+              width={80}
+            />
+          ) : (
+            <div
+              aria-hidden="true"
+              className="profile-avatar profile-avatar-placeholder"
+            >
+              {session.user.name.slice(0, 1)}
             </div>
-            <div>
-              <dt className="text-sm text-base-content/60">ইমেইল</dt>
-              <dd className="font-medium">{session.user.email}</dd>
-            </div>
-          </dl>
-          <div className="card-actions">
-            <Link className="btn btn-primary" href="/profile/update">
-              প্রোফাইল আপডেট
-            </Link>
-            <SignOutButton />
+          )}
+          <div className="profile-user-details">
+            <h2>{session.user.name}</h2>
+            <p className="profile-email">{session.user.email}</p>
           </div>
-        </div>
-      </section>
-    </div>
+          <SignOutButton />
+        </section>
+
+        <section aria-labelledby="profile-info-title" className="profile-info">
+          <h2 id="profile-info-title">তথ্য</h2>
+          <ProfileUpdateForm name={session.user.name} />
+        </section>
+      </div>
+    </main>
   );
 }

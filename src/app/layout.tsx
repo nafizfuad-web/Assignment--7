@@ -27,7 +27,7 @@ export default async function RootLayout({
   return (
     <html lang="bn" data-theme="light">
       <body
-        className={`${hindSiliguri.className} flex min-h-screen flex-col bg-[#fafaf8] text-gray-900 antialiased`}
+        className={`${hindSiliguri.className} flex min-h-screen flex-col antialiased`}
       >
         <Navbar categories={categories} />
         <PriceTicker />

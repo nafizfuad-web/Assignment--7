@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { CategoryNavigation } from "@/components/CategoryNavigation";
 import { DateLabel } from "@/components/DateLabel";
+import { NavbarAccount } from "@/components/NavbarAccount";
 import type { Category } from "@/lib/utils";
 
 export default function Navbar({ categories }: { categories: Category[] }) {
@@ -17,12 +18,7 @@ export default function Navbar({ categories }: { categories: Category[] }) {
             <DateLabel />
           </span>
         </Link>
-        <Link
-          className="btn btn-sm border-0 bg-green-700 text-white hover:bg-green-800"
-          href="/signin"
-        >
-          সাইন ইন
-        </Link>
+        <NavbarAccount />
       </div>
       <nav aria-label="পণ্যের বিভাগ" className="border-t border-gray-100">
         <Suspense

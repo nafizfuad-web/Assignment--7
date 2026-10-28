@@ -14,12 +14,18 @@ export function ProfileUpdateForm({ name }: { name: string }) {
     event.preventDefault();
     setError("");
     setSaved(false);
-    setIsPending(true);
 
     const formData = new FormData(event.currentTarget);
+    const updatedName = String(formData.get("name") ?? "").trim();
+    if (!updatedName) {
+      setError("নাম খালি রাখা যাবে না।");
+      return;
+    }
+
+    setIsPending(true);
     try {
       const result = await authClient.updateUser({
-        name: String(formData.get("name")),
+        name: updatedName,
       });
 
       if (result.error) {
@@ -41,14 +47,18 @@ export function ProfileUpdateForm({ name }: { name: string }) {
   }
 
   return (
-    <form className="card-body gap-4" onSubmit={handleSubmit}>
+    <form
+      className="profile-form card-body gap-4"
+      noValidate
+      onSubmit={handleSubmit}
+    >
       <label className="form-control w-full">
         <span className="label-text mb-1">নাম</span>
         <input
           className="input input-bordered w-full"
           defaultValue={name}
           name="name"
-          required
+          aria-invalid={Boolean(error)}
         />
       </label>
       {error && (
@@ -56,14 +66,14 @@ export function ProfileUpdateForm({ name }: { name: string }) {
           {error}
         </p>
       )}
+      <button className="btn btn-primary" disabled={isPending} type="submit">
+        {isPending ? "সংরক্ষণ হচ্ছে…" : "আপডেট"}
+      </button>
       {saved && (
         <p className="text-sm text-success" role="status">
-          প্রোফাইল আপডেট হয়েছে।
+          নাম আপডেট হয়েছে।
         </p>
       )}
-      <button className="btn btn-primary" disabled={isPending}>
-        {isPending ? "সংরক্ষণ হচ্ছে…" : "পরিবর্তন সংরক্ষণ করুন"}
-      </button>
     </form>
   );
 }
