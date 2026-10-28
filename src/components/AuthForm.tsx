@@ -15,12 +15,14 @@ import type { SocialProvider } from "@/lib/social-providers";
 type AuthFormProps = {
   mode: "signin" | "signup";
   callbackURL: string;
+  socialError?: string;
   socialProviders: SocialProvider[];
 };
 
 export function AuthForm({
   mode,
   callbackURL,
+  socialError,
   socialProviders,
 }: AuthFormProps) {
   const router = useRouter();
@@ -34,7 +36,9 @@ export function AuthForm({
     setIsPending(true);
 
     const formData = new FormData(event.currentTarget);
-    const email = String(formData.get("email"));
+    const email = String(formData.get("email") || "")
+      .trim()
+      .toLowerCase();
     const password = String(formData.get("password"));
     try {
       const result = isSignUp
@@ -112,7 +116,11 @@ export function AuthForm({
       <SubmitButton loading={isPending}>
         {isSignUp ? "অ্যাকাউন্ট তৈরি করুন" : "সাইন ইন"}
       </SubmitButton>
-      <SocialButtons callbackURL={callbackURL} providers={socialProviders} />
+      <SocialButtons
+        callbackURL={callbackURL}
+        errorMessage={socialError}
+        providers={socialProviders}
+      />
       <p className="text-center text-sm text-base-content/70">
         {isSignUp ? "আগে থেকেই অ্যাকাউন্ট আছে?" : "নতুন ব্যবহারকারী?"}{" "}
         <Link

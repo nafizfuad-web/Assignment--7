@@ -10,6 +10,7 @@ import type { SocialProvider } from "@/lib/social-providers";
 
 type SignInFormProps = {
   callbackURL: string;
+  socialError?: string;
   socialProviders: SocialProvider[];
 };
 
@@ -21,6 +22,7 @@ type FormErrors = {
 
 export default function SignInForm({
   callbackURL,
+  socialError,
   socialProviders,
 }: SignInFormProps) {
   const router = useRouter();
@@ -59,13 +61,20 @@ export default function SignInForm({
       const { error } = await signIn.email({ email, password });
 
       if (error) {
-        console.error("SIGN IN ERROR:", error);
+        console.error("SIGN IN ERROR:", {
+          status: error.status,
+          statusText: error.statusText,
+          code: error.code,
+        });
         let message = "সাইন ইন করা যায়নি, আবার চেষ্টা করুন।";
         if (
           error.code === "INVALID_EMAIL_OR_PASSWORD" ||
           error.status === 401
         ) {
           message = "ইমেইল বা পাসওয়ার্ড ভুল হয়েছে।";
+        } else if (error.status >= 500) {
+          message =
+            "সার্ভারে সমস্যা হয়েছে। MongoDB চালু আছে কি না যাচাই করে আবার চেষ্টা করুন।";
         } else if (error.message) {
           message = error.message;
         }
@@ -86,7 +95,22 @@ export default function SignInForm({
     }
   }
 
-  if (isPending || session) {
+  if (isPending) {
+    return (
+      <div className="w-full">
+        <div className="h-10 animate-pulse rounded-lg bg-[#e3ebe5]" />
+        <div className="mt-4 h-10 animate-pulse rounded-lg bg-[#e3ebe5]" />
+        <div className="mt-4 h-10 animate-pulse rounded-lg bg-[#cfe3d5]" />
+        <SocialButtons
+          callbackURL={callbackURL}
+          errorMessage={socialError}
+          providers={socialProviders}
+        />
+      </div>
+    );
+  }
+
+  if (session) {
     return (
       <div className="w-full">
         <div className="h-10 animate-pulse rounded-lg bg-[#e3ebe5]" />
@@ -127,7 +151,11 @@ export default function SignInForm({
         />
         <SubmitButton loading={loading}>সাইন ইন</SubmitButton>
       </form>
-      <SocialButtons callbackURL={callbackURL} providers={socialProviders} />
+      <SocialButtons
+        callbackURL={callbackURL}
+        errorMessage={socialError}
+        providers={socialProviders}
+      />
       <p className="mt-4 text-center text-sm">
         অ্যাকাউন্ট নেই?{" "}
         <Link

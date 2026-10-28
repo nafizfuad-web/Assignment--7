@@ -2,13 +2,14 @@ import { AuthShell } from "@/components/auth/AuthParts";
 import SignInForm from "@/components/auth/SignInForm";
 import { getSafeCallbackURL } from "@/lib/auth-redirect";
 import { getEnabledSocialProviders } from "@/lib/social-providers";
+import { getSocialAuthErrorMessage } from "@/lib/social-auth-errors";
 
 export default async function SignInPage({
   searchParams,
 }: {
-  searchParams: Promise<{ callbackURL?: string }>;
+  searchParams: Promise<{ callbackURL?: string; error?: string }>;
 }) {
-  const { callbackURL } = await searchParams;
+  const { callbackURL, error } = await searchParams;
   const socialProviders = getEnabledSocialProviders();
 
   return (
@@ -18,6 +19,7 @@ export default async function SignInPage({
     >
       <SignInForm
         callbackURL={getSafeCallbackURL(callbackURL)}
+        socialError={error ? getSocialAuthErrorMessage(error) : undefined}
         socialProviders={socialProviders}
       />
     </AuthShell>
