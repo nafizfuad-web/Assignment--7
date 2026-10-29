@@ -38,8 +38,8 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 BETTER_AUTH_SECRET=এখানে_তৈরি_করা_secret_দিন
 GOOGLE_CLIENT_ID=Google_Client_ID
 GOOGLE_CLIENT_SECRET=Google_Client_Secret
-GITHUB_CLIENT_ID=GitHub_Client_ID
-GITHUB_CLIENT_SECRET=GitHub_Client_Secret
+GITHUB_ID=GitHub_Client_ID
+GITHUB_SECRET=GitHub_Client_Secret
 MONGODB_URI=mongodb://127.0.0.1:27017/bazar-dor
 ```
 

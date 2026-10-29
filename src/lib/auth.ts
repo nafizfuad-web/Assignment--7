@@ -21,8 +21,9 @@ if (secret && secret.length < 32) {
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
-const githubClientId = process.env.GITHUB_CLIENT_ID;
-const githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
+const githubClientId = process.env.GITHUB_ID || process.env.GITHUB_CLIENT_ID;
+const githubClientSecret =
+  process.env.GITHUB_SECRET || process.env.GITHUB_CLIENT_SECRET;
 const facebookClientId = process.env.FACEBOOK_CLIENT_ID;
 const facebookClientSecret = process.env.FACEBOOK_CLIENT_SECRET;
 const discordClientId = process.env.DISCORD_CLIENT_ID;

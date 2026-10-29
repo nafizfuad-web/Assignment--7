@@ -6,7 +6,10 @@ export function getEnabledSocialProviders(): SocialProvider[] {
   if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
     providers.push("google");
   }
-  if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
+  const githubClientId = process.env.GITHUB_ID || process.env.GITHUB_CLIENT_ID;
+  const githubClientSecret =
+    process.env.GITHUB_SECRET || process.env.GITHUB_CLIENT_SECRET;
+  if (githubClientId && githubClientSecret) {
     providers.push("github");
   }
   if (process.env.FACEBOOK_CLIENT_ID && process.env.FACEBOOK_CLIENT_SECRET) {
