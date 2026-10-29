@@ -1,12 +1,14 @@
-import Image from "next/image";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { ProfileUpdateForm } from "@/components/ProfileUpdateForm";
 import { SignOutButton } from "@/components/SignOutButton";
+import { UserAvatar } from "@/components/UserAvatar";
 import { getCurrentSession } from "@/lib/auth";
 
 export const instant = false;
 
 export default async function ProfilePage() {
+  await connection();
   const session = await getCurrentSession();
   if (!session) redirect("/signin?callbackURL=%2Fprofile");
 
@@ -19,23 +21,14 @@ export default async function ProfilePage() {
         </header>
 
         <section aria-label="ব্যবহারকারীর তথ্য" className="profile-summary">
-          {session.user.image ? (
-            <Image
-              alt={`${session.user.name} এর ছবি`}
-              className="profile-avatar"
-              height={80}
-              src={session.user.image}
-              unoptimized
-              width={80}
-            />
-          ) : (
-            <div
-              aria-hidden="true"
-              className="profile-avatar profile-avatar-placeholder"
-            >
-              {session.user.name.slice(0, 1)}
-            </div>
-          )}
+          <UserAvatar
+            alt={`${session.user.name} এর ছবি`}
+            className="profile-avatar"
+            fallbackClassName="profile-avatar profile-avatar-placeholder"
+            image={session.user.image}
+            name={session.user.name}
+            size={64}
+          />
           <div className="profile-user-details">
             <h2>{session.user.name}</h2>
             <p className="profile-email">{session.user.email}</p>

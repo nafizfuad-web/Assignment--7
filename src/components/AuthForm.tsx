@@ -10,6 +10,10 @@ import {
   SocialButtons,
   SubmitButton,
 } from "@/components/auth/AuthParts";
+import {
+  getEmailAuthErrorMessage,
+  getEmailAuthNetworkErrorMessage,
+} from "@/lib/email-auth-errors";
 import type { SocialProvider } from "@/lib/social-providers";
 
 type AuthFormProps = {
@@ -51,7 +55,10 @@ export function AuthForm({
         : await authClient.signIn.email({ email, password, callbackURL });
 
       if (result.error) {
-        const message = result.error.message ?? "অনুরোধটি সম্পন্ন করা যায়নি।";
+        const message = getEmailAuthErrorMessage({
+          code: result.error.code,
+          status: result.error.status,
+        });
         setError(message);
         toast.error(message);
         return;
@@ -68,11 +75,8 @@ export function AuthForm({
       toast.success("সাইন ইন সফল হয়েছে।");
       router.push(callbackURL);
       router.refresh();
-    } catch (requestError) {
-      const message =
-        requestError instanceof Error
-          ? requestError.message
-          : "অনুরোধটি সম্পন্ন করা যায়নি।";
+    } catch {
+      const message = getEmailAuthNetworkErrorMessage();
       setError(message);
       toast.error(message);
     } finally {

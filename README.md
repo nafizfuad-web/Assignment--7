@@ -43,7 +43,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 Copy-Item .env.example .env.local
 ```
 
-`.env.local`-এ `BETTER_AUTH_SECRET`-এর জন্য `npx auth secret` চালিয়ে তৈরি করা অন্তত ৩২ অক্ষরের random secret বসান। MongoDB চালু রাখুন; local URI `mongodb://127.0.0.1:27017/bazar-dor` ব্যবহার করা হয়। Google/GitHub sign-in চালু করতে সংশ্লিষ্ট provider-এর client ID ও secret পূরণ করুন।
+`.env.local`-এ `BETTER_AUTH_SECRET`-এর জন্য `npx auth secret` চালিয়ে তৈরি করা অন্তত ৩২ অক্ষরের random secret বসান। MongoDB চালু রাখুন; `MONGODB_URI`-তে connection URI এবং `MONGODB_DATABASE`-এ database name দিন। বর্তমান Atlas সেটআপে database name `test`; local MongoDB ব্যবহার করলে URI `mongodb://127.0.0.1:27017` এবং database name `bazar-dor` দিতে পারেন। Google, GitHub, Facebook বা Discord sign-in চালু করতে `.env.example`-এ থাকা সংশ্লিষ্ট provider-এর client ID ও secret পূরণ করুন।
 
 ```bash
 npm run dev

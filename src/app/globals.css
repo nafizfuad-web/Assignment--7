@@ -77,18 +77,19 @@ main {
 
 .profile-avatar {
   display: grid;
-  width: 80px;
-  height: 80px;
+  width: 64px;
+  height: 64px;
   place-items: center;
   overflow: hidden;
-  border-radius: 12px;
+  flex-shrink: 0;
+  border-radius: 50%;
   object-fit: cover;
 }
 
 .profile-avatar-placeholder {
   background: color-mix(in srgb, var(--green) 12%, var(--surface));
   color: var(--green);
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 600;
 }
 
@@ -209,11 +210,6 @@ main {
     grid-template-columns: 64px minmax(0, 1fr);
     gap: 12px;
     padding: 20px;
-  }
-
-  .profile-avatar {
-    width: 64px;
-    height: 64px;
   }
 
   .profile-user-details h2 {

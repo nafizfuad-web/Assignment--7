@@ -143,10 +143,14 @@ export function SocialButtons({
     setBusy(provider);
     setRequestError("");
     try {
+      const errorCallbackURL = new URL(window.location.href);
+      errorCallbackURL.searchParams.delete("error");
+      errorCallbackURL.searchParams.delete("error_description");
+
       const { error } = await signIn.social({
         provider,
         callbackURL,
-        errorCallbackURL: window.location.href,
+        errorCallbackURL: errorCallbackURL.toString(),
       });
       if (error) {
         const message = getSocialAuthErrorMessage(

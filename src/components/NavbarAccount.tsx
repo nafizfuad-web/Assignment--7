@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
+import { UserAvatar } from "@/components/UserAvatar";
 import { useSession } from "@/lib/auth-client";
 
 export function NavbarAccount() {
@@ -32,23 +32,14 @@ export function NavbarAccount() {
       className="flex min-w-0 items-center gap-2 rounded-full p-1 text-sm font-medium hover:bg-green-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700"
       href="/profile"
     >
-      {session.user.image ? (
-        <Image
-          alt=""
-          className="h-9 w-9 rounded-full object-cover"
-          height={36}
-          src={session.user.image}
-          unoptimized
-          width={36}
-        />
-      ) : (
-        <span
-          aria-hidden="true"
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-green-100 font-semibold text-green-800"
-        >
-          {session.user.name.slice(0, 1)}
-        </span>
-      )}
+      <UserAvatar
+        alt=""
+        className="h-9 w-9 rounded-full object-cover"
+        fallbackClassName="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-green-100 font-semibold text-green-800"
+        image={session.user.image}
+        name={session.user.name}
+        size={36}
+      />
       <span className="max-w-32 truncate">{session.user.name}</span>
     </Link>
   );

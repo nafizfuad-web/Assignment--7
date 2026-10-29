@@ -7,7 +7,7 @@ import { getSocialAuthErrorMessage } from "@/lib/social-auth-errors";
 export default async function SignInPage({
   searchParams,
 }: {
-  searchParams: Promise<{ callbackURL?: string; error?: string }>;
+  searchParams: Promise<{ callbackURL?: string; error?: string | string[] }>;
 }) {
   const { callbackURL, error } = await searchParams;
   const socialProviders = getEnabledSocialProviders();

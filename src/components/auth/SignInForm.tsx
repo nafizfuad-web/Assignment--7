@@ -6,6 +6,10 @@ import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { Field, SocialButtons, SubmitButton } from "@/components/auth/AuthParts";
 import { signIn, useSession } from "@/lib/auth-client";
+import {
+  getEmailAuthErrorMessage,
+  getEmailAuthNetworkErrorMessage,
+} from "@/lib/email-auth-errors";
 import type { SocialProvider } from "@/lib/social-providers";
 
 type SignInFormProps = {
@@ -61,23 +65,15 @@ export default function SignInForm({
       const { error } = await signIn.email({ email, password });
 
       if (error) {
-        console.error("SIGN IN ERROR:", {
+        console.warn("Sign-in request failed:", {
           status: error.status,
           statusText: error.statusText,
           code: error.code,
         });
-        let message = "সাইন ইন করা যায়নি, আবার চেষ্টা করুন।";
-        if (
-          error.code === "INVALID_EMAIL_OR_PASSWORD" ||
-          error.status === 401
-        ) {
-          message = "ইমেইল বা পাসওয়ার্ড ভুল হয়েছে।";
-        } else if (error.status >= 500) {
-          message =
-            "সার্ভারে সমস্যা হয়েছে। MongoDB চালু আছে কি না যাচাই করে আবার চেষ্টা করুন।";
-        } else if (error.message) {
-          message = error.message;
-        }
+        const message = getEmailAuthErrorMessage({
+          code: error.code,
+          status: error.status,
+        });
         setErrors({ form: message });
         toast.error(message);
         return;
@@ -87,7 +83,7 @@ export default function SignInForm({
       router.push(callbackURL);
       router.refresh();
     } catch {
-      const message = "সাইন ইন করা যায়নি, আবার চেষ্টা করুন।";
+      const message = getEmailAuthNetworkErrorMessage();
       setErrors({ form: message });
       toast.error(message);
     } finally {

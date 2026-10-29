@@ -5,10 +5,15 @@ import { headers } from "next/headers";
 
 const baseURL = process.env.BETTER_AUTH_URL ?? "http://localhost:3000";
 const databaseURI = process.env.MONGODB_URI;
+const databaseName = process.env.MONGODB_DATABASE;
 const secret = process.env.BETTER_AUTH_SECRET;
 
 if (!databaseURI) {
   throw new Error("MONGODB_URI must be set to connect Better Auth to MongoDB.");
+}
+
+if (!databaseName) {
+  throw new Error("MONGODB_DATABASE must be set to select the Better Auth database.");
 }
 
 if (process.env.NODE_ENV === "production" && !secret) {
@@ -56,7 +61,23 @@ export const auth = betterAuth({
   baseURL,
   secret,
   trustedOrigins,
-  database: mongodbAdapter(mongoClient.db(), { client: mongoClient }),
+  logger: {
+    level: "warn",
+    log(level, message) {
+      if (
+        process.env.NODE_ENV === "development" &&
+        message === "Failed to validate authorization code"
+      ) {
+        console.error(`[Social OAuth diagnostic]: ${message}`);
+        return;
+      }
+
+      console[level](`[Better Auth]: ${message}`);
+    },
+  },
+  database: mongodbAdapter(mongoClient.db(databaseName), {
+    client: mongoClient,
+  }),
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,
@@ -65,8 +86,8 @@ export const auth = betterAuth({
   },
   account: {
     accountLinking: {
-      trustedProviders: ["google", "github"],
-      requireLocalEmailVerified: false,
+      enabled: true,
+      requireLocalEmailVerified: true,
       allowDifferentEmails: false,
     },
   },
