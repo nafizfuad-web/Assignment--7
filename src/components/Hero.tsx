@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getBanglaDate } from "@/lib/utils";
 import { connection } from "next/server";
 
@@ -6,7 +7,7 @@ export default async function Hero() {
 
   return (
     <section className="my-6 flex items-center justify-between gap-6 overflow-hidden rounded-3xl border border-gray-200 bg-white px-8 py-7">
-      <div>
+      <div className="min-w-0 flex-1">
         <span className="inline-block rounded-full border border-gray-200 bg-green-50 px-3 text-sm text-green-700">
           {getBanglaDate()}
         </span>
@@ -24,12 +25,14 @@ export default async function Hero() {
           সব পণ্য দেখুন
         </a>
       </div>
-      <div
-        aria-hidden="true"
-        className="hidden pr-10 text-[140px] leading-none md:block"
-      >
-        🧺
-      </div>
+      <Image
+        alt="বাজারের পণ্য"
+        className="hidden h-[280px] w-[280px] shrink-0 rounded-2xl object-cover md:block"
+        height={280}
+        priority
+        src="/bazar-hero.jpg"
+        width={280}
+      />
     </section>
   );
 }
